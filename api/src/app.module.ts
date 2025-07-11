@@ -9,6 +9,7 @@ import { UrlsModule } from './urls/urls.module';
 import databaseConfig from '@config/database.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -24,6 +25,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       isGlobal: true,
       load: [databaseConfig],
     }),
+
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

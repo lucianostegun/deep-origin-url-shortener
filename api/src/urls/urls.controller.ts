@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  BadRequestException,
 } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { CreateUrlDto } from './dto/create-url.dto';
@@ -30,9 +31,16 @@ export class UrlsController {
     return this.urlsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUrlDto: UpdateUrlDto) {
-    return this.urlsService.update(+id, updateUrlDto);
+  @Patch(':publicId')
+  async update(
+    @Param('publicId') publicId: string,
+    @Body() updateUrlDto: UpdateUrlDto,
+  ) {
+    if (await this.urlsService.slugExists(updateUrlDto.slug, publicId)) {
+      throw new BadRequestException('Slug not available');
+    }
+
+    return this.urlsService.update(publicId, updateUrlDto);
   }
 
   @Delete(':id')

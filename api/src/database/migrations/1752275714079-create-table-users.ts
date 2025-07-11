@@ -1,17 +1,17 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class Main implements MigrationInterface {
-  name = 'createTableUrls1752265074591';
-
+export class CreateTableUsers1752275714079 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'urls',
+        name: 'users',
         columns: [
           {
             name: 'id',
-            type: 'serial',
+            type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'public_id',
@@ -20,19 +20,15 @@ export class Main implements MigrationInterface {
             isUnique: true,
           },
           {
-            name: 'original_url',
-            type: 'text',
-          },
-          {
-            name: 'slug',
+            name: 'email',
             type: 'varchar',
-            length: '32',
+            length: '255',
             isUnique: true,
           },
           {
-            name: 'click_count',
-            type: 'int',
-            default: 0,
+            name: 'password',
+            type: 'varchar',
+            length: '255',
           },
           {
             name: 'created_at',
@@ -46,26 +42,12 @@ export class Main implements MigrationInterface {
             onUpdate: 'CURRENT_TIMESTAMP',
           },
         ],
-        indices: [
-          {
-            name: 'IDX_URLS_PUBLIC_ID',
-            columnNames: ['public_id'],
-          },
-          {
-            name: 'IDX_URLS_SLUG',
-            columnNames: ['slug'],
-          },
-          {
-            name: 'IDX_URLS_CREATED_AT',
-            columnNames: ['created_at'],
-          },
-        ],
       }),
       true,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('urls');
+    await queryRunner.dropTable('users');
   }
 }

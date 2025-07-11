@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
@@ -19,7 +19,6 @@ export class UrlsService {
 
     do {
       slug = this.generateShortUrlSlug();
-      console.log(`Generated slug: ${slug}`);
     } while (await this.slugExists(slug));
 
     const url = this.urlRepository.create({
@@ -44,14 +43,15 @@ export class UrlsService {
     return await this.urlRepository.findOne({ where: { publicId } });
   }
 
-  async update(id: number, updateUrlDto: UpdateUrlDto): Promise<Url | null> {
+  async update(
+    publicId: string,
+    updateUrlDto: UpdateUrlDto,
+  ): Promise<Url | null> {
     const updateData: Partial<Url> = {};
-    if (updateUrlDto.url) {
-      updateData.originalUrl = updateUrlDto.url;
-    }
+    updateData.slug = updateUrlDto.slug;
 
-    await this.urlRepository.update(id, updateData);
-    return await this.findOne(id);
+    await this.urlRepository.update({ publicId }, updateData);
+    return await this.findByPublicId(publicId);
   }
 
   async remove(id: number): Promise<void> {
@@ -62,8 +62,10 @@ export class UrlsService {
     await this.urlRepository.increment({ publicId }, 'clickCount', 1);
   }
 
-  async slugExists(slug: string): Promise<boolean> {
-    const count = await this.urlRepository.count({ where: { slug } });
+  async slugExists(slug: string, publicId?: string): Promise<boolean> {
+    const count = await this.urlRepository.count({
+      where: { slug, ...(publicId ? { publicId: Not(publicId) } : {}) },
+    });
 
     return count > 0;
   }
