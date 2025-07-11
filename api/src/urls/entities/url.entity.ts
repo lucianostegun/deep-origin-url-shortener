@@ -1,6 +1,13 @@
 import { Exclude, Expose } from 'class-transformer';
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
+@Entity('urls')
 export class Url {
   @Exclude()
   @PrimaryGeneratedColumn({
@@ -11,6 +18,40 @@ export class Url {
   @Expose({ name: 'id' })
   @Column({
     name: 'public_id',
+    type: 'varchar',
+    length: 10,
+    unique: true,
   })
   public publicId!: string;
+
+  @Column({
+    name: 'original_url',
+    type: 'text',
+  })
+  public originalUrl!: string;
+
+  @Column({
+    name: 'short_url',
+    type: 'varchar',
+    length: 255,
+    unique: true,
+  })
+  public shortUrl!: string;
+
+  @Column({
+    name: 'click_count',
+    type: 'int',
+    default: 0,
+  })
+  public clickCount!: number;
+
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  public createdAt!: Date;
+
+  @UpdateDateColumn({
+    name: 'updated_at',
+  })
+  public updatedAt!: Date;
 }

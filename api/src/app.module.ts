@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { UrlsModule } from './urls/urls.module';
 import databaseConfig from '@config/database.config';
 import { ConfigModule } from '@nestjs/config';
+import { config } from 'dotenv';
+
+config();
 
 @Module({
   imports: [
