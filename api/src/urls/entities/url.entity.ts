@@ -31,12 +31,11 @@ export class Url {
   public originalUrl!: string;
 
   @Column({
-    name: 'short_url',
+    name: 'slug',
     type: 'varchar',
-    length: 255,
     unique: true,
   })
-  public shortUrl!: string;
+  public slug!: string;
 
   @Column({
     name: 'click_count',

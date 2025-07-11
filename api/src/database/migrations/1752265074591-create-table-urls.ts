@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class Main implements MigrationInterface {
-  name = 'CreateUrlsTable1752265074591';
+  name = 'createTableUrls1752265074591';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
@@ -16,7 +16,7 @@ export class Main implements MigrationInterface {
           {
             name: 'public_id',
             type: 'varchar',
-            length: '10',
+            length: '26',
             isUnique: true,
           },
           {
@@ -24,9 +24,9 @@ export class Main implements MigrationInterface {
             type: 'text',
           },
           {
-            name: 'short_url',
+            name: 'slug',
             type: 'varchar',
-            length: '255',
+            length: '32',
             isUnique: true,
           },
           {
@@ -52,8 +52,8 @@ export class Main implements MigrationInterface {
             columnNames: ['public_id'],
           },
           {
-            name: 'IDX_URLS_SHORT_URL',
-            columnNames: ['short_url'],
+            name: 'IDX_URLS_SLUG',
+            columnNames: ['slug'],
           },
           {
             name: 'IDX_URLS_CREATED_AT',
