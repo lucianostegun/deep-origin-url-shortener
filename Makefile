@@ -7,6 +7,11 @@ TTY_PARAM := $(shell tty > /dev/null && echo "" || echo "-T")
 WINPTY := $(shell command -v winpty && echo "winpty " ||  echo "")
 COMPOSE_NETWORK := $(shell docker network ls | grep default | grep deeporigin | awk '{print $$2}' | tail -n 1)
 
+ifneq ($(wildcard ./api/.env),)
+	include ./api/.env
+	export
+endif
+
 create-network:
 	docker network create deeporigin_network
 
@@ -34,9 +39,15 @@ else
 	docker-compose down
 endif
 
+init-db:
+	docker-compose exec database bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS ${DATABASE_NAME}'"
+	docker-compose exec database bash -c "psql -U postgres -c 'CREATE DATABASE ${DATABASE_NAME}'"
+# 	make migrate
+# 	make seed
+
 bash:
 	@echo "Bashing $(ENV)..."
-	$(WINPTY)docker-compose exec $(TTY_PARAM) newzzer-app bash
+	$(WINPTY)docker-compose exec $(TTY_PARAM) api bash
 
 status:
 	docker-compose ps
