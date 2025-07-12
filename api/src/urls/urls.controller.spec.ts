@@ -1,18 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UrlsController } from '../../../src/urls/urls.controller';
-import { UrlsService } from '../../../src/urls/urls.service';
-import { DataSource, Repository } from 'typeorm';
-import { Url } from '../../../src/urls/entities/url.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Url } from './entities/url.entity';
+import { UrlsController } from './urls.controller';
+import { UrlsService } from './urls.service';
 
 describe('UrlsController', () => {
   let controller: UrlsController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forFeature([Url])],
       controllers: [UrlsController],
-      providers: [UrlsService, Repository<Url>, DataSource],
+      providers: [
+        UrlsService,
+        {
+          provide: getRepositoryToken(Url),
+          useValue: {},
+        },
+      ],
     }).compile();
 
     controller = module.get<UrlsController>(UrlsController);

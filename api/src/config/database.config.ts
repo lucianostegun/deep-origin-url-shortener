@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import { Url } from '../urls/entities/url.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const config: DataSourceOptions = {
@@ -8,13 +9,13 @@ export const config: DataSourceOptions = {
   username: `${process.env.DATABASE_USER}`,
   password: `${process.env.DATABASE_PASSWORD}`,
   database: `${process.env.DATABASE_NAME}`,
-  entities: ['dist/**/*.entity{.ts,.js}'],
+  // entities: ['dist/**/*.entity{.ts,.js}'],
+  entities: [Url],
   migrations: ['dist/database/migrations/*{.ts,.js}'],
   synchronize: false,
   logging: false,
   subscribers: [],
 };
 
-console.log(config);
 export default registerAs('database', () => config);
 export const connectionSource = new DataSource(config);

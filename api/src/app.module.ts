@@ -1,14 +1,14 @@
 import { config } from 'dotenv';
 
-config();
+config({ quiet: true });
 
+import databaseConfig from './config/database.config';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UrlsModule } from './urls/urls.module';
-import databaseConfig from '@config/database.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UrlsModule } from './urls/urls.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
