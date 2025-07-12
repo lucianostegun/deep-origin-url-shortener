@@ -24,11 +24,23 @@ export class Url {
   })
   public publicId!: string;
 
+  @Exclude()
+  @Column({
+    name: 'user_id',
+  })
+  public userId!: number;
+
   @Column({
     name: 'original_url',
     type: 'text',
   })
   public originalUrl!: string;
+
+  @Column({
+    name: 'short_url',
+    type: 'text',
+  })
+  public shortUrl!: string;
 
   @Column({
     name: 'slug',

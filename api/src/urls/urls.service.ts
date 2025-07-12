@@ -18,12 +18,13 @@ export class UrlsService {
     let slug: string;
 
     do {
-      slug = this.generateShortUrlSlug();
+      slug = this.generateSlug();
     } while (await this.slugExists(slug));
 
     const url = this.urlRepository.create({
       publicId,
       originalUrl: createUrlDto.url,
+      shortUrl: this.generateShortUrl(slug),
       slug,
       clickCount: 0,
     });
@@ -49,6 +50,7 @@ export class UrlsService {
   ): Promise<Url | null> {
     const updateData: Partial<Url> = {};
     updateData.slug = updateUrlDto.slug;
+    updateData.shortUrl = this.generateShortUrl(updateUrlDto.slug);
 
     await this.urlRepository.update({ publicId }, updateData);
     return await this.findByPublicId(publicId);
@@ -70,7 +72,7 @@ export class UrlsService {
     return count > 0;
   }
 
-  private generateShortUrlSlug(length: number = 6): string {
+  generateSlug(length: number = 6): string {
     const chars =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let slug = '';
@@ -80,5 +82,9 @@ export class UrlsService {
     }
 
     return slug;
+  }
+
+  generateShortUrl(slug: string): string {
+    return process.env.SHORTED_DOMAIN + '/' + slug;
   }
 }

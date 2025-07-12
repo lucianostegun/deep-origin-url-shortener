@@ -18,7 +18,16 @@ export class CreateTableUrls1752285874591 implements MigrationInterface {
             isUnique: true,
           },
           {
+            name: 'user_id',
+            type: 'int',
+            isNullable: true,
+          },
+          {
             name: 'original_url',
+            type: 'text',
+          },
+          {
+            name: 'short_url',
             type: 'text',
           },
           {
@@ -26,11 +35,6 @@ export class CreateTableUrls1752285874591 implements MigrationInterface {
             type: 'varchar',
             length: '32',
             isUnique: true,
-          },
-          {
-            name: 'user_id',
-            type: 'int',
-            isNullable: true,
           },
           {
             name: 'click_count',

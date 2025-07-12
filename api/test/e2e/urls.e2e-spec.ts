@@ -1,5 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  INestApplication,
+  ValidationPipe,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../../src/app.module';
@@ -15,6 +20,9 @@ describe('UrlsController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalInterceptors(
+      new ClassSerializerInterceptor(app.get(Reflector)),
+    );
 
     await app.init();
   });
@@ -27,6 +35,23 @@ describe('UrlsController (e2e)', () => {
         message: ['url must be a URL address', 'url must be a string'],
         error: 'Bad Request',
         statusCode: 400,
+      });
+  });
+
+  it('/urls (POST) - should create URL and return publicId as id', () => {
+    return request(app.getHttpServer())
+      .post('/urls')
+      .send({ url: 'https://www.example.com' })
+      .expect(201)
+      .then((response) => {
+        const body = response.body;
+        expect(body).toHaveProperty('id');
+        expect(body).not.toHaveProperty('publicId');
+        expect(body).toHaveProperty('originalUrl', 'https://www.example.com');
+        expect(body).toHaveProperty('slug');
+        expect(body).toHaveProperty('clickCount', 0);
+        expect(body).toHaveProperty('createdAt');
+        expect(body).toHaveProperty('updatedAt');
       });
   });
 });

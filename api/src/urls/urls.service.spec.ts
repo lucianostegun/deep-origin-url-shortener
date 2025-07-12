@@ -37,13 +37,13 @@ describe('UrlsService', () => {
 
   describe('generateShortUrlSlug', () => {
     it('should generate a 6 chars length string', () => {
-      const slug = service['generateShortUrlSlug']();
+      const slug = service['generateSlug']();
 
       expect(slug).toHaveLength(6);
     });
 
     it('should match a [A-Za-z0-9] pattern', () => {
-      const slug = service['generateShortUrlSlug']();
+      const slug = service['generateSlug']();
 
       expect(slug).toMatch(/^[A-Za-z0-9]+$/);
     });
