@@ -13,8 +13,6 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    UrlsModule,
-
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
@@ -26,6 +24,7 @@ import { UsersModule } from './users/users.module';
       load: [databaseConfig],
     }),
 
+    UrlsModule,
     UsersModule,
   ],
   controllers: [AppController],

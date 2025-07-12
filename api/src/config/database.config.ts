@@ -15,5 +15,6 @@ export const config: DataSourceOptions = {
   subscribers: [],
 };
 
+console.log(config);
 export default registerAs('database', () => config);
 export const connectionSource = new DataSource(config);
