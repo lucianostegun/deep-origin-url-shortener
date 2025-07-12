@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './UrlShortenerForm.css';
 
-function UrlShortenerForm() {
-  const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [resultLabel, setResultLabel] = useState('');
+interface UrlShortenerFormProps {
+  onUrlSubmit?: (url: string) => Promise<void>;
+}
 
-  const generateShortUrl = async (url) => {
+interface ApiResponse {
+  shortUrl: string;
+}
+
+function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Element {
+  const [url, setUrl] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [resultLabel, setResultLabel] = useState<string>('');
+
+  const generateShortUrl = async (url: string): Promise<void> => {
     try {
       const response = await fetch('http://localhost:3000/urls', {
         method: 'POST',
@@ -21,7 +29,7 @@ function UrlShortenerForm() {
         throw new Error('Failed to shorten URL');
       }
 
-      const data = await response.json();
+      const data: ApiResponse = await response.json();
       setResultLabel(`Shortened URL: ${data.shortUrl || 'N/A'}`);
     } catch (error) {
       console.error('Error shortening URL:', error);
@@ -29,7 +37,7 @@ function UrlShortenerForm() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     setErrorMessage('');
@@ -41,7 +49,11 @@ function UrlShortenerForm() {
 
     setIsLoading(true);
     try {
-      await generateShortUrl(url);
+      if (onUrlSubmit) {
+        await onUrlSubmit(url);
+      } else {
+        await generateShortUrl(url);
+      }
       setUrl('');
     } catch {
       setErrorMessage('Error occurred while shortening URL');
@@ -50,7 +62,7 @@ function UrlShortenerForm() {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setUrl(e.target.value);
 
     if (errorMessage) {
