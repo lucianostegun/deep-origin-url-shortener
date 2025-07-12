@@ -8,10 +8,25 @@ function UrlShortenerForm() {
   const [resultLabel, setResultLabel] = useState('');
 
   const generateShortUrl = async (url) => {
-    // TODO: Implementar chamada para a API
-    // Por enquanto, apenas simula o processo
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setResultLabel(`Shortened URL will appear here for: ${url}`);
+    try {
+      const response = await fetch('http://localhost:3000/urls', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to shorten URL');
+      }
+
+      const data = await response.json();
+      setResultLabel(`Shortened URL: ${data.shortUrl || 'N/A'}`);
+    } catch (error) {
+      console.error('Error shortening URL:', error);
+      setErrorMessage('Error occurred while shortening URL');
+    }
   };
 
   const handleSubmit = async (e) => {
