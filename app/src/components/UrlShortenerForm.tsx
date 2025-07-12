@@ -44,13 +44,12 @@ function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Ele
       const json = await response.json();
 
       if (!response.ok) {
-        throw new Error(json);
+        throw new Error(json.message[0] || 'Failed to shorten URL');
       }
 
       const data: ApiResponse = json;
       setResultLabel(data.shortUrl);
     } catch (error: any) {
-      console.error('Error shortening URL:', error);
       setErrorMessage('Failed to shorten URL: ' + error.message);
     }
   };
@@ -72,7 +71,6 @@ function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Ele
       } else {
         await generateShortUrl(url);
       }
-      setUrl('');
     } catch {
       setErrorMessage('Error occurred while shortening URL');
     } finally {
