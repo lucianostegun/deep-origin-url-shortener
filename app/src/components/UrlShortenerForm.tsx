@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './UrlShortenerForm.css';
+import { apiCall, apiConfig } from '../utils/api';
 
 interface UrlShortenerFormProps {
   onUrlSubmit?: (url: string) => Promise<void>;
@@ -14,26 +15,36 @@ function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Ele
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [resultLabel, setResultLabel] = useState<string>('');
+  const [copySuccess, setCopySuccess] = useState<boolean>(false);
+
+  const copyToClipboard = async (): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(resultLabel);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000); // Reset after 2 seconds
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+    }
+  };
 
   const generateShortUrl = async (url: string): Promise<void> => {
     try {
-      const response = await fetch('http://localhost:3000/urls', {
+      const response = await apiCall(apiConfig.endpoints.shortenUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({ url }),
       });
 
+      const json = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to shorten URL');
+        throw new Error(json);
       }
 
-      const data: ApiResponse = await response.json();
-      setResultLabel(`Shortened URL: ${data.shortUrl || 'N/A'}`);
-    } catch (error) {
+      const data: ApiResponse = json;
+      setResultLabel(data.shortUrl);
+    } catch (error: any) {
       console.error('Error shortening URL:', error);
-      setErrorMessage('Error occurred while shortening URL');
+      setErrorMessage('Failed to shorten URL: ' + error.message);
     }
   };
 
@@ -91,7 +102,14 @@ function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Ele
           {errorMessage && <div className="error-message">{errorMessage}</div>}
         </div>
       </form>
-      {resultLabel && <div className="result-label">{resultLabel}</div>}
+      {resultLabel && (
+        <div className="result-container">
+          <div className="result-label">{resultLabel}</div>
+          <button type="button" onClick={copyToClipboard} className="copy-button" title="Copy to clipboard">
+            {copySuccess ? '✓ Copied!' : 'Copy URL'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
