@@ -42,8 +42,12 @@ endif
 init-db:
 	docker-compose exec database bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS ${DATABASE_NAME}'"
 	docker-compose exec database bash -c "psql -U postgres -c 'CREATE DATABASE ${DATABASE_NAME}'"
-# 	make migrate
-# 	make seed
+	cd api && npm run migration:run
+
+init-testdb:
+	docker-compose exec database bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS ${DATABASE_NAME}_test'"
+	docker-compose exec database bash -c "psql -U postgres -c 'CREATE DATABASE ${DATABASE_NAME}_test'"
+	cd api && npm run test:migration:run
 
 bash:
 	@echo "Bashing $(ENV)..."
