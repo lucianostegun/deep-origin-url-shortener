@@ -27,6 +27,13 @@ function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Ele
     }
   };
 
+  const resetForm = (): void => {
+    setResultLabel('');
+    setUrl('');
+    setErrorMessage('');
+    setCopySuccess(false);
+  };
+
   const generateShortUrl = async (url: string): Promise<void> => {
     try {
       const response = await apiCall(apiConfig.endpoints.shortenUrl, {
@@ -87,28 +94,39 @@ function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Ele
         <img src="https://client-docs.deeporigin.io/images/logo.svg" alt="DeepOrigin Logo" className="logo" />
         <h1 className="title">URL Shortener 🪄</h1>
       </div>
-      <p className="description">Enter your long URL below and we make it shorter for you</p>
-      <form onSubmit={handleSubmit} className="url-form">
-        <div className="input-group">
-          <label htmlFor="url-input" className="url-label">
-            URL
-          </label>
-          <div className="input-container">
-            <input id="url-input" type="url" value={url} onChange={handleInputChange} placeholder="https://www.mywebsite.com/a-very-long-address" className="url-input" disabled={isLoading} />
-            <button type="submit" className="submit-button" disabled={isLoading}>
-              {isLoading ? 'Processing...' : 'Short it'}
+      {!resultLabel && <p className="description">Enter your long URL below and we make it shorter for you</p>}
+      {!resultLabel && (
+        <form onSubmit={handleSubmit} className="url-form">
+          <div className="input-group">
+            <label htmlFor="url-input" className="url-label">
+              URL
+            </label>
+            <div className="input-container">
+              <input id="url-input" type="url" value={url} onChange={handleInputChange} placeholder="https://www.mywebsite.com/a-very-long-address" className="url-input" disabled={isLoading} />
+              <button type="submit" className="submit-button" disabled={isLoading}>
+                {isLoading ? 'Processing...' : 'Short it'}
+              </button>
+            </div>
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
+          </div>
+        </form>
+      )}
+      {resultLabel && (
+        <>
+          <div className="success-message">Your URL has been shorten 🎉</div>
+          <div className="input-group">
+            <label className="url-label">Shortened URL</label>
+            <div className="result-container">
+              <div className="result-label">{resultLabel}</div>
+              <button type="button" onClick={copyToClipboard} className="copy-button" title="Copy to clipboard">
+                {copySuccess ? '✓ Copied!' : 'Copy'}
+              </button>
+            </div>
+            <button type="button" onClick={resetForm} className="submit-button" style={{ marginTop: '1rem', width: '100%' }}>
+              Shorten another URL
             </button>
           </div>
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
-        </div>
-      </form>
-      {resultLabel && (
-        <div className="result-container">
-          <div className="result-label">{resultLabel}</div>
-          <button type="button" onClick={copyToClipboard} className="copy-button" title="Copy to clipboard">
-            {copySuccess ? '✓ Copied!' : 'Copy URL'}
-          </button>
-        </div>
+        </>
       )}
     </div>
   );
