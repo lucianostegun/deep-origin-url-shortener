@@ -312,3 +312,21 @@ This project is part of the DeepOrigin technical challenge.
 ## 🙋‍♂️ Support
 
 For questions or issues, please refer to the project documentation or create an issue in the repository.
+
+## 📋 API Testing
+
+For your convenience, we've included an Insomnia collection file in the project root that contains example API calls to test all endpoints.
+
+**File**: `insomnia-collection.json`
+
+### How to use:
+
+1. Install [Insomnia](https://insomnia.rest/) (free API testing tool)
+2. Open Insomnia
+3. Click "Import" and select the `insomnia-collection.json` file from the project root
+4. The collection includes pre-configured requests for:
+   - Creating shortened URLs
+   - Retrieving URL lists
+   - Rate limiting examples
+
+All requests are pre-configured with the correct headers, base URLs, and example payloads to get you started quickly with API testing.
