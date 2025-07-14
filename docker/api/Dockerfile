@@ -18,7 +18,7 @@ RUN apk update && apk upgrade && apk add bash nano
 RUN sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
 
 # Install dependencies
-RUN npm install -g @nestjs/cli
+RUN npm install -g @nestjs/cli typeorm-ts-node-commonjs
 COPY ./docker/api/start-container.sh /usr/local/bin/start-container
 RUN chmod +x /usr/local/bin/start-container
 
