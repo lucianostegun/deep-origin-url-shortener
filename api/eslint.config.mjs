@@ -31,6 +31,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/unbound-method': 'warn',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
       'max-len': ['error', { code: 200, tabWidth: 2, ignoreUrls: true, ignoreStrings: true, ignoreTemplateLiterals: true }],
       'prettier/prettier': ['error', { printWidth: 200, singleQuote: true, trailingComma: 'all' }],
     },

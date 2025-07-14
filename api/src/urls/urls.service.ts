@@ -5,6 +5,7 @@ import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
 import { ulid } from 'ulid';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class UrlsService {
@@ -13,7 +14,7 @@ export class UrlsService {
     private readonly urlRepository: Repository<Url>,
   ) {}
 
-  async create(createUrlDto: CreateUrlDto): Promise<Url> {
+  async create(createUrlDto: CreateUrlDto, userId: number): Promise<Url> {
     const publicId = ulid();
     let slug: string;
 
@@ -23,6 +24,7 @@ export class UrlsService {
 
     const url = this.urlRepository.create({
       publicId,
+      userId,
       originalUrl: createUrlDto.url,
       shortUrl: this.generateShortUrl(slug),
       slug,
@@ -32,29 +34,33 @@ export class UrlsService {
     return await this.urlRepository.save(url);
   }
 
-  async findAll(): Promise<Url[]> {
-    return await this.urlRepository.find();
+  async findAll(userId?: number): Promise<Url[]> {
+    return await this.urlRepository.find({ where: { userId } });
   }
 
-  async findOne(id: number): Promise<Url | null> {
-    return await this.urlRepository.findOne({ where: { id } });
+  async findOne(id: number, userId?: number): Promise<Url | null> {
+    return await this.urlRepository.findOne({ where: { id, userId } });
   }
 
-  async findByPublicId(publicId: string): Promise<Url | null> {
-    return await this.urlRepository.findOne({ where: { publicId } });
+  async findByPublicId(publicId: string, userId?: number): Promise<Url | null> {
+    return await this.urlRepository.findOne({ where: { publicId, userId } });
   }
 
-  async update(publicId: string, updateUrlDto: UpdateUrlDto): Promise<Url | null> {
+  async findBySlug(slug: string): Promise<Url | null> {
+    return await this.urlRepository.findOne({ where: { slug } });
+  }
+
+  async update(publicId: string, updateUrlDto: UpdateUrlDto, userId?: number): Promise<Url | null> {
     const updateData: Partial<Url> = {};
     updateData.slug = updateUrlDto.slug;
     updateData.shortUrl = this.generateShortUrl(updateUrlDto.slug);
 
-    await this.urlRepository.update({ publicId }, updateData);
+    await this.urlRepository.update({ publicId, userId }, updateData);
     return await this.findByPublicId(publicId);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.urlRepository.delete(id);
+  async remove(id: number, userId?: number): Promise<void> {
+    await this.urlRepository.delete({ id, userId });
   }
 
   async incrementClickCount(publicId: string): Promise<void> {

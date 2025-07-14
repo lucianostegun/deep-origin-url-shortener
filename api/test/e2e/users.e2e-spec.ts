@@ -30,7 +30,7 @@ describe('Users (e2e)', () => {
   describe('/users (POST)', () => {
     it('should create a new user', () => {
       const createUserDto = {
-        email: 'test@example.com',
+        email: 'test1@example.com',
         name: 'Test User',
       };
 
@@ -90,7 +90,7 @@ describe('Users (e2e)', () => {
   describe('/users/:publicId (GET)', () => {
     it('should return a user by public id', async () => {
       const user = userRepository.create({
-        email: 'test@example.com',
+        email: 'test2@example.com',
         name: 'Test User',
         publicId: 'test-ulid',
       });
@@ -121,7 +121,7 @@ describe('Users (e2e)', () => {
   describe('/users/:id (DELETE)', () => {
     it('should delete a user', async () => {
       const user = userRepository.create({
-        email: 'test@example.com',
+        email: 'test3@example.com',
         name: 'Test User',
         publicId: 'test-ulid',
       });
