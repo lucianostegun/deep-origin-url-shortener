@@ -20,15 +20,15 @@ export class CreateTableUsers1752275714079 implements MigrationInterface {
             isUnique: true,
           },
           {
+            name: 'name',
+            type: 'varchar',
+            length: '128',
+          },
+          {
             name: 'email',
             type: 'varchar',
             length: '255',
             isUnique: true,
-          },
-          {
-            name: 'password',
-            type: 'varchar',
-            length: '255',
           },
           {
             name: 'created_at',
