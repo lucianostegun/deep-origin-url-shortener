@@ -4,7 +4,6 @@ import { AppModule } from '../../app.module';
 
 async function runSeeders() {
   try {
-    // Check if running in production environment
     const nodeEnv = process.env.NODE_ENV;
 
     if (nodeEnv === 'production') {
@@ -18,7 +17,6 @@ async function runSeeders() {
 
     const app = await NestFactory.createApplicationContext(AppModule);
 
-    // Use the UserService seeder instead of direct SQL queries
     await UserServiceSeeder.run(app);
 
     console.log('🎉 All seeders completed successfully!');

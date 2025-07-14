@@ -1,12 +1,19 @@
+import { Exclude, Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @Exclude()
+  @PrimaryGeneratedColumn({
+    name: 'id',
+  })
+  public id!: number;
 
-  @Column({ length: 26, unique: true })
-  public_id!: string;
+  @Expose({ name: 'id' })
+  @Column({
+    name: 'public_id',
+  })
+  public publicId!: string;
 
   @Column({ length: 255, unique: true })
   email!: string;
@@ -14,9 +21,13 @@ export class User {
   @Column({ length: 255, nullable: true })
   name?: string;
 
-  @CreateDateColumn()
-  created_at!: Date;
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  public createdAt!: Date;
 
-  @UpdateDateColumn()
-  updated_at!: Date;
+  @UpdateDateColumn({
+    name: 'updated_at',
+  })
+  public updatedAt!: Date;
 }

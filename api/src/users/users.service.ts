@@ -15,7 +15,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = this.userRepository.create({
       ...createUserDto,
-      public_id: ulid(),
+      publicId: ulid(),
     });
 
     return await this.userRepository.save(user);
@@ -33,7 +33,7 @@ export class UsersService {
 
   async findByPublicId(publicId: string): Promise<User | null> {
     return await this.userRepository.findOne({
-      where: { public_id: publicId },
+      where: { publicId },
     });
   }
 
@@ -49,7 +49,7 @@ export class UsersService {
     const userEntities = users.map((userData) =>
       this.userRepository.create({
         ...userData,
-        public_id: ulid(),
+        publicId: ulid(),
       }),
     );
 

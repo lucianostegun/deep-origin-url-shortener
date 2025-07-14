@@ -44,10 +44,7 @@ export class UrlsService {
     return await this.urlRepository.findOne({ where: { publicId } });
   }
 
-  async update(
-    publicId: string,
-    updateUrlDto: UpdateUrlDto,
-  ): Promise<Url | null> {
+  async update(publicId: string, updateUrlDto: UpdateUrlDto): Promise<Url | null> {
     const updateData: Partial<Url> = {};
     updateData.slug = updateUrlDto.slug;
     updateData.shortUrl = this.generateShortUrl(updateUrlDto.slug);
@@ -73,8 +70,7 @@ export class UrlsService {
   }
 
   generateSlug(length: number = 6): string {
-    const chars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let slug = '';
 
     for (let i = 0; i < length; i++) {

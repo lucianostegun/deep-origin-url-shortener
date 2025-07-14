@@ -15,8 +15,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        configService.get('database')!,
+      useFactory: (configService: ConfigService) => configService.get('database')!,
     }),
 
     ConfigModule.forRoot({

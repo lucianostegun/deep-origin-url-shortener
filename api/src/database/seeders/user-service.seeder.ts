@@ -31,7 +31,6 @@ export class UserServiceSeeder {
         },
       ];
 
-      // Create users using the service
       const createdUsers = await usersService.createMultiple(users);
 
       console.log('✅ Users seeded successfully!');

@@ -1,9 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  INestApplication,
-  ValidationPipe,
-  ClassSerializerInterceptor,
-} from '@nestjs/common';
+import { INestApplication, ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import * as request from 'supertest';
 import { App } from 'supertest/types';
@@ -20,9 +16,7 @@ describe('UrlsController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
-    app.useGlobalInterceptors(
-      new ClassSerializerInterceptor(app.get(Reflector)),
-    );
+    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
     await app.init();
   });
@@ -44,7 +38,7 @@ describe('UrlsController (e2e)', () => {
       .send({ url: 'https://www.example.com' })
       .expect(201)
       .then((response) => {
-        const body = response.body;
+        const body: unknown = response.body;
         expect(body).toHaveProperty('id');
         expect(body).not.toHaveProperty('publicId');
         expect(body).toHaveProperty('originalUrl', 'https://www.example.com');
