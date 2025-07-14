@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import './UrlShortenerForm.css';
-import { apiCall, apiConfig } from '../utils/api';
+import { apiCall, apiConfig } from '../../utils/api';
 
 interface UrlShortenerFormProps {
   onUrlSubmit?: (url: string) => Promise<void>;
+  userId?: string;
 }
 
 interface ApiResponse {
   shortUrl: string;
 }
 
-function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Element {
+function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React.JSX.Element {
   const [url, setUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -36,8 +37,14 @@ function UrlShortenerForm({ onUrlSubmit }: UrlShortenerFormProps): React.JSX.Ele
 
   const generateShortUrl = async (url: string): Promise<void> => {
     try {
+      const headers: Record<string, string> = {};
+      if (userId) {
+        headers['user-id'] = userId;
+      }
+
       const response = await apiCall(apiConfig.endpoints.shortenUrl, {
         method: 'POST',
+        headers,
         body: JSON.stringify({ url }),
       });
 
