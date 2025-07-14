@@ -34,6 +34,11 @@ function UrlShortenerForm({ onUrlSubmit, userId, onUrlCreated }: UrlShortenerFor
     setUrl('');
     setErrorMessage('');
     setCopySuccess(false);
+
+    // Notify parent that URLs should be refreshed when resetting form
+    if (onUrlCreated) {
+      onUrlCreated();
+    }
   };
 
   const generateShortUrl = async (url: string): Promise<void> => {
@@ -65,10 +70,6 @@ function UrlShortenerForm({ onUrlSubmit, userId, onUrlCreated }: UrlShortenerFor
       const localShortUrl = `${window.location.origin}/r/${slug}`;
 
       setResultLabel(localShortUrl);
-
-      if (onUrlCreated) {
-        onUrlCreated();
-      }
     } catch (error: any) {
       setErrorMessage('Failed to shorten URL: ' + error.message);
     }
