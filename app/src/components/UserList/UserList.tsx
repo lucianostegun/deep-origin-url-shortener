@@ -3,7 +3,7 @@ import { apiCall } from '../../utils/api';
 import './UserList.css';
 
 interface User {
-  publicId: string;
+  id: string;
   name: string;
 }
 
@@ -32,7 +32,7 @@ function UserList({ onUserSelect, selectedUserId }: UserListProps): React.JSX.El
 
         // Auto-select first user if none is selected
         if (usersData.length > 0 && !selectedUserId) {
-          onUserSelect(usersData[0].publicId);
+          onUserSelect(usersData[0].id);
         }
       } catch (error: any) {
         setErrorMessage('Failed to load users: ' + error.message);
@@ -71,7 +71,7 @@ function UserList({ onUserSelect, selectedUserId }: UserListProps): React.JSX.El
           Choose a user...
         </option>
         {users.map(user => (
-          <option key={user.publicId} value={user.publicId}>
+          <option key={user.id} value={user.id}>
             {user.name}
           </option>
         ))}

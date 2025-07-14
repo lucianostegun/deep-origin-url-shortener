@@ -37,7 +37,9 @@ function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React
 
   const generateShortUrl = async (url: string): Promise<void> => {
     try {
-      const headers: Record<string, string> = {};
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
       if (userId) {
         headers['user-id'] = userId;
       }

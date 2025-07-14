@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate {
     }
 
     const user = await this.usersService.findByPublicId(userId);
+
     if (!user) {
       console.log(`User not found for ID: ${userId}`);
       return false;
