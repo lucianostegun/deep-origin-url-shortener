@@ -1,19 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpCode, HttpStatus, Res, NotFoundException, UseGuards, SetMetadata } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpCode, HttpStatus, NotFoundException, UseGuards, SetMetadata } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
-import { CurrentUser } from '../auth/current-user.decorator';
+import { CurrentUser } from '../common/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { Response } from 'express';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../common/guards/auth.guard';
+import { RateLimitGuard, RateLimit } from '../common/guards/rate-limit.guard';
 
 @Controller('urls')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RateLimitGuard)
 export class UrlsController {
   constructor(private readonly urlsService: UrlsService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @RateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    maxRequests: 10, // Max 10 requests per minute
+    message: 'Too many URLs created. Wait 1 minute before trying again.',
+  })
   create(@Body() createUrlDto: CreateUrlDto, @CurrentUser() user: User) {
     return this.urlsService.create(createUrlDto, user.id);
   }

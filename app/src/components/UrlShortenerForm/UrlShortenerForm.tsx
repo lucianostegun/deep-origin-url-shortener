@@ -60,12 +60,20 @@ function UrlShortenerForm({ onUrlSubmit, userId, onUrlCreated }: UrlShortenerFor
       const json = await response.json();
 
       if (!response.ok) {
-        throw new Error(json.message[0] || 'Failed to shorten URL');
+        // Handle rate limiting specifically
+        if (response.status === 429) {
+          throw new Error(json.message || 'Muitas solicitações. Tente novamente em alguns instantes.');
+        }
+        throw new Error(json.message[0] || json.message || 'Failed to shorten URL');
       }
 
       const data: ApiResponse = json;
 
-      setResultLabel(data.shortUrl);
+      const urlParts = data.shortUrl.split('/');
+      const slug = urlParts[urlParts.length - 1];
+      const localShortUrl = `${window.location.origin}/r/${slug}`;
+
+      setResultLabel(localShortUrl);
     } catch (error: any) {
       setErrorMessage('Failed to shorten URL: ' + error.message);
     }
