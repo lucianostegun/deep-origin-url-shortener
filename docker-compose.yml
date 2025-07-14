@@ -1,7 +1,39 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    ports:
+      - '80:5173'
+    networks:
+      - deeporigin_network
+    volumes:
+      - ./app:/application
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      NODE_ENV: development
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - deeporigin_network
+    volumes:
+      - ./api:/application
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    environment:
+      NODE_ENV: development
+    depends_on:
+      database:
+        condition: service_healthy
+
   database:
-    # container_name: db.deeporigin.com.br
     image: postgres:17
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
