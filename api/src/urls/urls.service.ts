@@ -35,7 +35,7 @@ export class UrlsService {
   }
 
   async findAll(userId?: number): Promise<Url[]> {
-    return await this.urlRepository.find({ where: { userId } });
+    return await this.urlRepository.find({ where: { userId }, order: { createdAt: 'DESC' } });
   }
 
   async findOne(id: number, userId?: number): Promise<Url | null> {

@@ -5,13 +5,14 @@ import { apiCall, apiConfig } from '../../utils/api';
 interface UrlShortenerFormProps {
   onUrlSubmit?: (url: string) => Promise<void>;
   userId?: string;
+  onUrlCreated?: () => void;
 }
 
 interface ApiResponse {
   shortUrl: string;
 }
 
-function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React.JSX.Element {
+function UrlShortenerForm({ onUrlSubmit, userId, onUrlCreated }: UrlShortenerFormProps): React.JSX.Element {
   const [url, setUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -64,6 +65,10 @@ function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React
       const localShortUrl = `${window.location.origin}/r/${slug}`;
 
       setResultLabel(localShortUrl);
+
+      if (onUrlCreated) {
+        onUrlCreated();
+      }
     } catch (error: any) {
       setErrorMessage('Failed to shorten URL: ' + error.message);
     }
@@ -80,6 +85,7 @@ function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React
     }
 
     setIsLoading(true);
+
     try {
       if (onUrlSubmit) {
         await onUrlSubmit(url);
