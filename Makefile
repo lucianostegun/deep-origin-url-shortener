@@ -23,7 +23,12 @@ setup:
 	make create-network
 	make build
 	make start
-	sleep 30
+	# Wait for services to be ready instead of arbitrary sleep
+	@echo "Waiting for services to be ready..."
+	@while ! docker-compose exec api curl -f http://localhost:3000/health 2>/dev/null; do \
+			echo "Waiting for API..."; \
+			sleep 5; \
+	done
 	make init-db
 
 build: stop
@@ -51,13 +56,13 @@ else
 endif
 
 init-db:
-	docker-compose exec api bash -c "npm install -g ts-node && npm run migration:run"
+	docker-compose exec api bash -c "npm run migration:run"
 	docker-compose exec api bash -c "npm run seed:run"
 
 init-testdb:
 	docker-compose exec database bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS ${DATABASE_NAME}_test'"
 	docker-compose exec database bash -c "psql -U postgres -c 'CREATE DATABASE ${DATABASE_NAME}_test'"
-	docker-compose exec api bash -c "npm install -g ts-node && npm run test:migration:run"
+	docker-compose exec api bash -c "npm run test:migration:run"
 
 bash:
 	@echo "Bashing $(ENV)..."

@@ -14,7 +14,7 @@ ENV LC_ALL=en_US.UTF-8
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # change default shell from ash to bash
-RUN apk update && apk upgrade && apk add bash nano
+RUN apk update && apk upgrade && apk add bash nano curl
 RUN sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
 
 # Install dependencies

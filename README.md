@@ -109,13 +109,10 @@ This project is a full-stack URL shortener application developed as part of the 
    Run the setup commands from the project root:
 
    ```bash
-   	make create-network
-    make build
-    make start
-    make init-db
+   	make setup
    ```
 
-> **Note:** The database setup may fail the first time due to API initialization timing. If this happens, simply run the last command `make init-db` again after waiting a few seconds.
+> **Note:** The database setup may fail the first time due to API initialization timing. If this happens, simply run the command `make init-db` again after waiting a few seconds.
 
 That's it! The application will automatically:
 

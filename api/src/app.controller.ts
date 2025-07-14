@@ -12,4 +12,11 @@ export class AppController {
       version: '1.0.0',
     };
   }
+
+  @Get('/health')
+  health(): object {
+    return {
+      message: 'healthy',
+    };
+  }
 }
