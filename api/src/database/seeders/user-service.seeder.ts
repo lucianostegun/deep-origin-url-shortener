@@ -18,15 +18,15 @@ export class UserServiceSeeder {
 
       const users: CreateUserDto[] = [
         {
-          email: 'john.doe@example.com',
+          email: 'john.doe@deeporigin.com',
           name: 'John Doe',
         },
         {
-          email: 'jane.smith@example.com',
+          email: 'jane.smith@deeporigin.com',
           name: 'Jane Smith',
         },
         {
-          email: 'rick.sanchez@example.com',
+          email: 'rick.sanchez@deeporigin.com',
           name: 'Rick Sanchez',
         },
       ];

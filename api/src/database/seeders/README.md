@@ -29,9 +29,9 @@ Uses NestJS `UsersService` to create users, following the same API practices:
 
 Creates 3 example users:
 
-1. **john.doe@example.com** - John Doe
-2. **jane.smith@example.com** - Jane Smith
-3. **rick.sanchez@example.com** - Rick Sanchez
+1. **john.doe@deeporigin.com** - John Doe
+2. **jane.smith@deeporigin.com** - Jane Smith
+3. **rick.sanchez@deeporigin.com** - Rick Sanchez
 
 ### UserSeeder (Legacy)
 

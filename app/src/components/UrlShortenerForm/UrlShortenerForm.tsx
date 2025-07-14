@@ -65,11 +65,7 @@ function UrlShortenerForm({ onUrlSubmit, userId, onUrlCreated }: UrlShortenerFor
 
       const data: ApiResponse = json;
 
-      const urlParts = data.shortUrl.split('/');
-      const slug = urlParts[urlParts.length - 1];
-      const localShortUrl = `${window.location.origin}/r/${slug}`;
-
-      setResultLabel(localShortUrl);
+      setResultLabel(data.shortUrl);
     } catch (error: any) {
       setErrorMessage('Failed to shorten URL: ' + error.message);
     }

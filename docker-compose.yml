@@ -39,7 +39,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=
-      - POSTGRES_DB=deeporigin
+      - POSTGRES_DB=deeporigin_url_shortener
     ports:
       - '5432:5432'
     networks:

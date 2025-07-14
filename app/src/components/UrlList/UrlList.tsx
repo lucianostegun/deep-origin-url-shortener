@@ -6,6 +6,7 @@ interface Url {
   id: number;
   publicId: string;
   originalUrl: string;
+  shortUrl: string;
   slug: string;
   clickCount: number;
   createdAt: string;
@@ -72,10 +73,6 @@ const UrlList: React.FC<UrlListProps> = ({ userId, refreshTrigger }) => {
     return url.substring(0, maxLength) + '...';
   };
 
-  const getShortUrl = (slug: string) => {
-    return `${window.location.origin}/r/${slug}`;
-  };
-
   const handleEdit = (url: Url) => {
     // Placeholder for edit functionality
     console.log('Edit URL:', url);
@@ -131,8 +128,8 @@ const UrlList: React.FC<UrlListProps> = ({ userId, refreshTrigger }) => {
             {urls.map(url => (
               <div key={url.id} className="table-row">
                 <div className="url-cell">
-                  <a href={getShortUrl(url.slug)} target="_blank" rel="noopener noreferrer" className="short-url-link" title="Click to open">
-                    {getShortUrl(url.slug)}
+                  <a href={url.shortUrl} target="_blank" rel="noopener noreferrer" className="short-url-link" title="Click to open">
+                    {url.shortUrl}
                   </a>
                   <div className="original-url" title={url.originalUrl}>
                     {truncateUrl(url.originalUrl)}
@@ -142,12 +139,6 @@ const UrlList: React.FC<UrlListProps> = ({ userId, refreshTrigger }) => {
                 <div className="clicks-cell">
                   <span className="click-count">{url.clickCount}</span>
                   <span className="click-label">{url.clickCount === 1 ? 'click' : 'clicks'}</span>
-                </div>
-
-                <div className="actions-cell">
-                  <button onClick={() => handleEdit(url)} className="edit-button" title="Edit URL">
-                    Edit
-                  </button>
                 </div>
               </div>
             ))}
