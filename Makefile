@@ -23,7 +23,7 @@ setup:
 	make create-network
 	make build
 	make start
-	sleep 10
+	sleep 30
 	make init-db
 
 build: stop
@@ -51,13 +51,13 @@ else
 endif
 
 init-db:
-	docker-compose exec api bash -c "npm run migration:run"
+	docker-compose exec api bash -c "npm install -g ts-node && npm run migration:run"
 	docker-compose exec api bash -c "npm run seed:run"
 
 init-testdb:
 	docker-compose exec database bash -c "psql -U postgres -c 'DROP DATABASE IF EXISTS ${DATABASE_NAME}_test'"
 	docker-compose exec database bash -c "psql -U postgres -c 'CREATE DATABASE ${DATABASE_NAME}_test'"
-	docker-compose exec database bash -c "npm run test:migration:run"
+	docker-compose exec api bash -c "npm install -g ts-node && npm run test:migration:run"
 
 bash:
 	@echo "Bashing $(ENV)..."
