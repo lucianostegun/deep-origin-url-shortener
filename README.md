@@ -106,10 +106,14 @@ This project is a full-stack URL shortener application developed as part of the 
 
 3. **Start the application**
 
-   Run the setup command from the project root:
+   Run the setup commands from the project root:
 
    ```bash
-   make setup
+   	make delete-network
+    make create-network
+    make build
+    make start
+    make init-db
    ```
 
 That's it! The application will automatically:
