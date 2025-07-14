@@ -25,18 +25,15 @@ export class RateLimitGuard implements CanActivate {
     const userId = request.headers['user-id'];
 
     if (!userId) {
-      // If there is no user-id, block
       throw new HttpException('User ID is required', HttpStatus.BAD_REQUEST);
     }
 
     const key = `rate_limit:${userId}`;
     const now = Date.now();
 
-    // Get or create entry for the user
     let userLimit = rateLimitStore.get(key);
 
     if (!userLimit || now > userLimit.resetTime) {
-      // New time window or first request
       userLimit = {
         count: 1,
         resetTime: now + config.windowMs,
@@ -50,7 +47,6 @@ export class RateLimitGuard implements CanActivate {
       throw new HttpException(config.message || `Rate limit exceeded. Try again in ${resetInSeconds} seconds.`, HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    // Increment counter
     userLimit.count++;
     rateLimitStore.set(key, userLimit);
 
@@ -58,7 +54,6 @@ export class RateLimitGuard implements CanActivate {
   }
 }
 
-// Decorator to apply rate limiting
 export const RateLimit = (config: RateLimitConfig) => {
   return (target: any, propertyKey?: string, descriptor?: PropertyDescriptor) => {
     if (descriptor) {

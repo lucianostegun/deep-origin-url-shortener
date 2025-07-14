@@ -76,7 +76,7 @@ export class UrlsService {
   }
 
   generateSlug(length: number = 6): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789';
     let slug = '';
 
     for (let i = 0; i < length; i++) {
