@@ -9,7 +9,15 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+  build: {
+    // Ensure proper handling of client-side routing
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
       },
     },
   },

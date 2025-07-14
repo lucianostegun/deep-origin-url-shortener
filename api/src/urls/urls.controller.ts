@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpCode, HttpStatus, Res, NotFoundException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpCode, HttpStatus, Res, NotFoundException, UseGuards, SetMetadata } from '@nestjs/common';
 import { UrlsService } from './urls.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -42,8 +42,9 @@ export class UrlsController {
     return this.urlsService.remove(+id, user.id);
   }
 
+  @SetMetadata('skipGuard', true)
   @Get('redirect/:slug')
-  async redirect(@Param('slug') slug: string, @Res() res: Response) {
+  async redirect(@Param('slug') slug: string) {
     const url = await this.urlsService.findBySlug(slug);
 
     if (!url) {
@@ -51,6 +52,9 @@ export class UrlsController {
     }
 
     await this.urlsService.incrementClickCount(url.publicId);
-    return res.redirect(301, url.originalUrl);
+
+    return {
+      url: url.originalUrl,
+    };
   }
 }

@@ -1,0 +1,108 @@
+.redirect-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.redirect-content {
+  background: white;
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.redirect-content h1 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.redirect-content h2 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.redirect-content p {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.redirect-content.error h1 {
+  color: #e74c3c;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.back-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+}
+
+.back-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .redirect-page {
+    padding: 1rem;
+  }
+
+  .redirect-content {
+    padding: 2rem;
+  }
+
+  .redirect-content h1 {
+    font-size: 2rem;
+  }
+
+  .redirect-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .redirect-content p {
+    font-size: 1rem;
+  }
+}

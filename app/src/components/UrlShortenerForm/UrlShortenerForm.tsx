@@ -40,6 +40,7 @@ function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React
       const headers: Record<string, string> = {
         'Content-Type': 'application/json',
       };
+
       if (userId) {
         headers['user-id'] = userId;
       }
@@ -57,7 +58,12 @@ function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React
       }
 
       const data: ApiResponse = json;
-      setResultLabel(data.shortUrl);
+
+      const urlParts = data.shortUrl.split('/');
+      const slug = urlParts[urlParts.length - 1];
+      const localShortUrl = `${window.location.origin}/r/${slug}`;
+
+      setResultLabel(localShortUrl);
     } catch (error: any) {
       setErrorMessage('Failed to shorten URL: ' + error.message);
     }
@@ -124,7 +130,9 @@ function UrlShortenerForm({ onUrlSubmit, userId }: UrlShortenerFormProps): React
           <div className="input-group">
             <label className="url-label">Shortened URL</label>
             <div className="result-container">
-              <div className="result-label">{resultLabel}</div>
+              <a href={resultLabel} target="_blank" rel="noopener noreferrer" className="result-label clickable-link" title="Click to open in new tab">
+                {resultLabel}
+              </a>
               <button type="button" onClick={copyToClipboard} className="copy-button" title="Copy to clipboard">
                 {copySuccess ? '✓ Copied!' : 'Copy'}
               </button>
